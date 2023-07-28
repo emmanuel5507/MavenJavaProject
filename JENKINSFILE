@@ -1,5 +1,8 @@
 pipeline {
     agent any
+   environment {
+     DOC_CRED = credientials('emman777')
+   }
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
@@ -100,7 +103,7 @@ pipeline {
             steps {
 
             echo "Starting Docker image push to Docker Hub"
-             sh 'docker login -u emman777 -p nammelouis73'
+             sh 'echo $DOC_CRED_PSW | docker login -u $DOC_CRED_USR --password-stdin'
              sh 'docker push emman777/imagejapp'
             echo "Docker image push to Docker Hub completed"
             }
