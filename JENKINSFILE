@@ -1,11 +1,10 @@
 pipeline {
-    agent { label 'docker' }
-
+    agent any
     tools {
-        maven 'maven'
+        maven "maven"
     }
-
-    environment {
+    
+   environment {
         DOC_CRED = credentials('emman777')
     }
 
@@ -20,12 +19,24 @@ pipeline {
                 ])
             }
         }
-
+        
+        // Other stages...
+    }
+}
         stage('Clean') {
             steps {
-                sh './mvnw clean'
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 sh "mvn clean"
             }
+
             post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
                 success {
                     echo 'Cleaning Project is Done'
                 }
@@ -34,54 +45,88 @@ pipeline {
 
         stage('Compile') {
             steps {
-                sh './mvnw compile'
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 sh "mvn compile"
             }
+
             post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
                 success {
-                    echo 'Compiling Project is Done'
+                   echo 'Compiling Project is Done'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                sh './mvnw -Dmaven.test.failure.ignore=true test'
+                // Get some code froMaven_28FebJenkins.gitm a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 sh "mvn -Dmaven.test.failure.ignore=true test"
             }
+
             post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
+
                 }
             }
         }
+
 
         stage('Package') {
             steps {
-                sh './mvnw -Dmaven.test.failure.ignore=true clean package'
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
+
             post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
                 success {
-                    archiveArtifacts 'target/*.jar'
+                 archiveArtifacts 'target/*.jar'
                 }
             }
         }
-
-        stage("Build Docker Image") {
-            steps {
-                script {
-                    sh "docker build -t emman777/imagejapp ."
+        stage("Build Docker Image"){
+            steps{
+                script{
+                sh "docker build -t emman777/imagejapp ."
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                echo "Starting Docker image push to Docker Hub"
-                withCredentials([string(credentialsId: 'emman777', variable: 'DOC_CRED_PSW')]) {
-                    sh 'echo $DOC_CRED_PSW | docker login -u $DOC_CRED_USR --password-stdin'
-                }
-                sh 'docker push emman777/imagejapp'
-                echo "Docker image push to Docker Hub completed"
+
+            echo "Starting Docker image push to Docker Hub"
+             sh 'echo $DOC_CRED_PSW | docker login -u $DOC_CRED_USR --password-stdin'
+             sh 'docker push emman777/imagejapp'
+            echo "Docker image push to Docker Hub completed"
             }
         }
+
+
+
+
+
+
+
     }
 }
