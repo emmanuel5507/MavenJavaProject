@@ -1,14 +1,15 @@
 pipeline {
     agent any
-   environment {
-     DOC_CRED = credientials('emman777')
-   }
-
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "maven"
     }
 
+   environment {
+     DOC_CRED = credientials('emman777')
+   }
+
+    
     stages {
         stage('Clean') {
             steps {
