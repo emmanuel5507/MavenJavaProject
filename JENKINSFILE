@@ -13,7 +13,7 @@ pipeline {
     stages {
        stage('Checkout SCM') {
             steps {
-                checkout([$class: 'GitSCM',
+                checkout([$class: 'gitDefault',
                     branches: [[name: '*/master']],
                     userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
                     extensions: [[$class: 'CloneOption', depth: 1]],
