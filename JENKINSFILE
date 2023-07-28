@@ -11,15 +11,14 @@ pipeline {
     // Stages and other configurations...
 
     stages {
-        stage('Checkout SCM') {
+                stage('Checkout SCM') {
             steps {
-                sshagent(['jen_ssh']) {
-                    checkout([$class: 'GitSCM',
-                        branches: [[name: '*/master']],
-                        userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
-                        extensions: [[$class: 'CloneOption', depth: 1]],
-                    ])
-                }
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
+                    extensions: [[$class: 'CloneOption', depth: 1]],
+                    credentialsId: 'jen_ssh'
+                ])
             }
         }
         
