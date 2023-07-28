@@ -17,7 +17,7 @@ pipeline {
                     branches: [[name: '*/master']],
                     userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
                     extensions: [[$class: 'CloneOption', depth: 1]],
-                    credentialsId: 'jen_ssh'
+                    credentialsId: 'JKey'
                 ])
             }
         }
