@@ -1,0 +1,116 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven"
+    }
+
+    stages {
+        stage('Clean') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 bat "mvn clean"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    echo 'Cleaning Project is Done'
+                }
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 bat "mvn compile"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                   echo 'Compiling Project is Done'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Get some code froMaven_28FebJenkins.gitm a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 bat "mvn -Dmaven.test.failure.ignore=true test"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+
+                }
+            }
+        }
+
+
+        stage('Package') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+
+
+
+                // To run Maven on a Windows agent, use
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                 archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+        stage("Build Docker Image"){
+            steps{
+                script{
+                bat "docker build -t emman777/imagejapp ."
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+
+            echo "Starting Docker image push to Docker Hub"
+             bat 'docker login -u emman777 -p nammelouis73'
+             bat 'docker push emman777/imagejapp'
+            echo "Docker image push to Docker Hub completed"
+            }
+        }
+
+
+
+
+
+
+
+    }
+}
