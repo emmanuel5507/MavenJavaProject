@@ -15,7 +15,7 @@ pipeline {
 
 
                 // To run Maven on a Windows agent, use
-                 bat "mvn clean"
+                 sh "mvn clean"
             }
 
             post {
@@ -35,7 +35,7 @@ pipeline {
 
 
                 // To run Maven on a Windows agent, use
-                 bat "mvn compile"
+                 sh "mvn compile"
             }
 
             post {
@@ -55,7 +55,7 @@ pipeline {
 
 
                 // To run Maven on a Windows agent, use
-                 bat "mvn -Dmaven.test.failure.ignore=true test"
+                 sh "mvn -Dmaven.test.failure.ignore=true test"
             }
 
             post {
@@ -77,7 +77,7 @@ pipeline {
 
 
                 // To run Maven on a Windows agent, use
-                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             post {
@@ -91,7 +91,7 @@ pipeline {
         stage("Build Docker Image"){
             steps{
                 script{
-                bat "docker build -t emman777/imagejapp ."
+                sh "docker build -t emman777/imagejapp ."
                 }
             }
         }
@@ -100,8 +100,8 @@ pipeline {
             steps {
 
             echo "Starting Docker image push to Docker Hub"
-             bat 'docker login -u emman777 -p nammelouis73'
-             bat 'docker push emman777/imagejapp'
+             sh 'docker login -u emman777 -p nammelouis73'
+             sh 'docker push emman777/imagejapp'
             echo "Docker image push to Docker Hub completed"
             }
         }
