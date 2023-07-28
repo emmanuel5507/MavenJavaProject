@@ -11,16 +11,7 @@ pipeline {
 
     
     stages {
-       stage('Checkout SCM') {
-            steps {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/master']],
-                    userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
-                    extensions: [[$class: 'CloneOption', depth: 1]],
-                    credentialsId: 'JKey'
-                ])
-            }
-        }
+     
         stage('Clean') {
             steps {
                 // Get some code from a GitHub repository
