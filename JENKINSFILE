@@ -6,7 +6,7 @@ pipeline {
     }
 
    environment {
-     DOC_CRED = credientials('emman777')
+     DOC_CRED = credentials('emman777')
    }
 
     
