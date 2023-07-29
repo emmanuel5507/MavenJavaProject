@@ -16,6 +16,7 @@ pipeline {
                 checkout([$class: 'GitSCM',
                     branches: [[name: '*/master']],
                     userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
+
                     extensions: [[$class: 'CloneOption', depth: 1]],
                     credentialsId: 'jen'
                 ])
@@ -25,7 +26,7 @@ pipeline {
        stage('Clean') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
 
 
 
@@ -45,7 +46,7 @@ pipeline {
         stage('Compile') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
 
 
 
@@ -65,7 +66,7 @@ pipeline {
         stage('Test') {
             steps {
                 // Get some code froMaven_28FebJenkins.gitm a GitHub repository
-                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
 
 
 
@@ -87,7 +88,7 @@ pipeline {
         stage('Package') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/emmanuel5507/MavenJavaProject.git'
+                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
 
 
 
