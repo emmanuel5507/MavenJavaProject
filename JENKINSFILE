@@ -124,7 +124,7 @@ pipeline {
         stage('deploy on k8s'){
              steps{
                 sshagent(['kubeid']) {
-                  sh "scp -o StrictHostKeyChecking=no nodejsapp.yaml ubuntu@3.238.104.111:/home/ubuntu"
+                  sh "scp -o StrictHostKeyChecking=no ijapp.yaml ubuntu@3.238.104.111:/home/ubuntu"
             
                   script {
                 try{
