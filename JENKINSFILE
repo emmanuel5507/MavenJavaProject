@@ -108,7 +108,7 @@ pipeline {
         stage("Build Docker Image"){
             steps {
                 script {
-                    sh " docker build -t emman777/imagejapp:latest ."
+                    sh " -S docker build -t emman777/imagejapp:latest ."
                 }
             }
         }
