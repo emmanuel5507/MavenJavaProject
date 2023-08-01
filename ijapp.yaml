@@ -1,0 +1,37 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ij-app
+  namespace: default
+  labels:
+    app: ij-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ij-app
+  template:
+    metadata:
+      labels:
+        app: ij-app
+    spec:
+      containers:
+      - name: ij-app
+        image: "emman777/imagejapp:latest"
+        ports:
+          - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ij-app
+  namespace: default
+spec:
+  selector:
+    app: ij-app
+  type: LoadBalancer
+  ports:
+  - name: http
+    targetPort: 3000
+    port: 80
