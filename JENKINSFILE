@@ -108,7 +108,7 @@ pipeline {
         stage("Build Docker Image"){
             steps {
                 script {
-                    sh "docker build -t emman777/imagejapp ."
+                    sh "sudo docker build -t emman777/imagejapp:latest ."
                 }
             }
         }
@@ -116,8 +116,8 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 echo "Starting Docker image push to Docker Hub"
-                sh 'echo $DOC_CRED_PSW | docker login -u $DOC_CRED_USR --password-stdin'
-                sh 'docker push emman777/imagejapp'
+                sh 'echo $DOC_CRED_PSW | sudo docker login -u $DOC_CRED_USR --password-stdin'
+                sh 'sudo docker push emman777/imagejapp'
                 echo "Docker image push to Docker Hub completed"
             }
         }
