@@ -121,5 +121,20 @@ pipeline {
                 echo "Docker image push to Docker Hub completed"
             }
         }
+        stage('deploy on k8s'){
+             steps{
+                sshagent(['kubeid']) {
+                  sh "scp -o StrictHostKeyChecking=no nodejsapp.yaml ubuntu@3.238.104.111:/home/ubuntu"
+            
+                  script {
+                try{
+                    sh "ssh ubuntu@3.238.104.111 kubectl apply -f ."
+                }catch(error){
+                    sh "ssh ubuntu@3.238.104.111 kubectl create -f ."
+               }
+                  }
+               }
+             }
+        }
     }
 }
