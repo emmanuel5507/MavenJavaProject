@@ -105,10 +105,16 @@ pipeline {
             }
         }
         
-        stage("Build Docker Image"){
+        stage("Build Docker Image") {
+            agent {
+                docker {
+                    image 'openjdk:11'
+                    reuseNode true
+                }
+            }
             steps {
                 script {
-                    sh " docker build -t emman777/imagejapp ."
+                    sh "docker build -t emman777/imagejapp ."
                 }
             }
         }
