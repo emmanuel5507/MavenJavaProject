@@ -1,0 +1,5 @@
+- hosts: all
+  become: true
+  tasks:
+     -name: create new deployment and service
+      command: kubectl apply -f /home/azuruser/ijapp.yaml
