@@ -1,140 +1,18 @@
+@Library('jenkins_shared_lib') _
 pipeline {
     agent any
-    tools {
-        maven "maven"
-    }
-
-    environment {
-        DOC_CRED = credentials('emman777')
-    }
-    
     // Stages and other configurations...
 
     stages {
-                stage('Checkout SCM') {
+        stage('Git Checkout') {
             steps {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/master']],
-                    userRemoteConfigs: [[url: 'git@github.com:emmanuel5507/MavenJavaProject.git']],
-
-                    extensions: [[$class: 'CloneOption', depth: 1]],
-                    credentialsId: 'jen'
-                ])
-            }
-        }
-        
-       stage('Clean') {
-            steps {
-                // Get some code from a GitHub repository
-                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
-
-
-
-                // To run Maven on a Windows agent, use
-                 sh "mvn clean"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    echo 'Cleaning Project is Done'
+                script{
+                     gitCheckout(
+                     branch: "main"
+                     url: "https://github.com/emmanuel5507/MavenJavaProject.git"
+                     )
                 }
+
             }
         }
-
-        stage('Compile') {
-            steps {
-                // Get some code from a GitHub repository
-                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
-
-
-
-                // To run Maven on a Windows agent, use
-                 sh "mvn compile"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                   echo 'Compiling Project is Done'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Get some code froMaven_28FebJenkins.gitm a GitHub repository
-                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
-
-
-
-                // To run Maven on a Windows agent, use
-                 sh "mvn -Dmaven.test.failure.ignore=true test"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-
-                }
-            }
-        }
-
-
-        stage('Package') {
-            steps {
-                // Get some code from a GitHub repository
-                git 'git@github.com:emmanuel5507/MavenJavaProject.git'
-
-
-
-                // To run Maven on a Windows agent, use
-                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                 archiveArtifacts 'target/*.jar'
-                }
-            }
-        }
-        
-        stage("Build Docker Image"){
-            steps {
-                script {
-                    sh " docker build -t emman777/imagejapp ."
-                }
-            }
-        }
-        
-        stage('Push to Docker Hub') {
-            steps {
-                echo "Starting Docker image push to Docker Hub"
-                sh 'echo $DOC_CRED_PSW |  docker login -u $DOC_CRED_USR --password-stdin'
-                sh ' docker push emman777/imagejapp'
-                echo "Docker image push to Docker Hub completed"
-            }
-        }
-        stage('deploy on k8s'){
-             steps{
-                sshagent(['k8s']) {
-                  sh "scp -o StrictHostKeyChecking=no ijapp.yaml ubuntu@3.238.104.111:/home/ubuntu"
-            
-                  script {
-                try{
-                    sh "ssh ubuntu@3.238.104.111 kubectl apply -f ."
-                }catch(error){
-                    sh "ssh ubuntu@3.238.104.111 kubectl create -f ."
-               }
-                  }
-               }
-             }
-        }
-    }
-}
+   }
