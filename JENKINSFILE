@@ -1,18 +1,18 @@
 @Library('jenkins_shared_lib') _
+
 pipeline {
     agent any
-
 
     stages {
         stage('Git Checkout') {
             steps {
-                script{
-                     gitCheckout(
-                     branch: "master",
-                     url: "https://github.com/emmanuel5507/MavenJavaProject.git"
-                     )
+                script {
+                    gitCheckout(
+                        branch: "master",
+                        url: "https://github.com/emmanuel5507/MavenJavaProject.git"
+                    )
                 }
-
             }
         }
-   }
+    }
+}
